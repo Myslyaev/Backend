@@ -9,19 +9,21 @@ public class UsersRepository : BaseRepository, IUsersRepository
     {
     }
 
-    public List<UserDto> GetAllUsers()
-    {
-        return _ctx.Users.ToList();
-    }
+    public List<UserDto> GetAllUsers()=> _ctx.Users.ToList();
+  
+    public UserDto GetUserById(Guid id) => _ctx.Users.FirstOrDefault(u => u.Id == id);
 
-    public UserDto GetUserById(Guid id)
+    public void CreateUser(UserDto user) => _ctx.Users.Add(user);
+
+    public void DeleteUser(UserDto user) => _ctx.Users.Remove(user);
+       
+    public void UpdateUser(UserDto userFromDb, UserDto user)
     {
-        return new()
-        {
-            UserName = "TestName",
-            Id = id,
-            Password = "123",
-            Email = "123@mail.ru"
-        };
+            userFromDb.UserName = user.UserName;
+            userFromDb.Password = user.Password;
+            userFromDb.Devices = user.Devices;
+            userFromDb.Email = user.Email;
+
+            _ctx.Users.Update(userFromDb);
     }
 }
