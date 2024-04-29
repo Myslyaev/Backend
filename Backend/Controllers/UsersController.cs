@@ -1,6 +1,8 @@
 ﻿using Backend.BLL.IServices;
 using Backend.Core.DTOs;
+using Backend.Core.Models.Users;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Backend.API.Controllers;
 
@@ -10,6 +12,7 @@ namespace Backend.API.Controllers;
 public class UsersController : Controller
 {
     private readonly IUsersService _usersService;
+    private readonly Serilog.ILogger _logger = Log.ForContext<UsersController>();
 
     public UsersController(IUsersService usersService)
     {
@@ -17,67 +20,38 @@ public class UsersController : Controller
     }
 
     [HttpGet]
-    public ActionResult<List<UserDto>> GetAllUsers()
+    public ActionResult<List<UserResponse>> GetAllUsers()
     {
-        try
-        {
-            var result = _usersService.GetAllUsers();
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
-
+        _logger.Information("Получаем список всех пользователей");
+        return Ok(_usersService.GetAllUsers());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<UserDto> GetUserById(Guid id)
+    public ActionResult<UserWithDevicesResponse> GetUserById(Guid id)
     {
-        var result = _usersService.GetUserById(id);
-        return Ok(result);
+        _logger.Information($"Получаем пользователя по {id}");
+        return Ok(_usersService.GetUserById(id));
     }
 
     [HttpPost]
-    public ActionResult CreateUser([FromQuery] UserDto user)
+    public ActionResult<Guid> CreateUser([FromBody] CreateUserRequest request)
     {
-        try
-        {
-            _usersService.CreateUser(user);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        return NoContent();
-
+        _logger.Information($"Добавляем пользователя {request.Email}");
+        return Ok(_usersService.CreateUser(request));
     }
 
     [HttpPut("{id}")]
-    public ActionResult UpdateUser(Guid id, [FromQuery] UserDto user)
+    public ActionResult UpdateUser([FromBody] UpdateUserRequest request)
     {
-        try
-        {
-            _usersService.UpdateUser(id, user);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
-        return NoContent();
+        _logger.Information($"Изменяем инфорфацию о пользователе {request.Id}");
+        return Ok(_usersService.UpdateUser(request));
     }
 
     [HttpDelete("{id}")]
     public ActionResult DeleteUserById(Guid id)
     {
-        try
-        {
-            _usersService.DeleteUserById(id);
-        }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
-        return NoContent();
+        _logger.Information($"Удаляем пользователя {id}");
+        _usersService.DeleteUserById(id);
+        return Ok();
     }
 }

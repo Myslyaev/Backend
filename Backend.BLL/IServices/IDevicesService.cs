@@ -1,13 +1,13 @@
-﻿using Backend.Core.DTOs;
+﻿using Backend.Core.Models.Devices;
 
 namespace Backend.BLL.IServices
 {
     public interface IDevicesService
     {
-        void CreateDevice(DeviceDto device);
-        void DeleteDevice(Guid id);
-        List<DeviceDto> GetAllDevices();
-        DeviceDto GetDeviceById(Guid id);
-        void UpdateDevice(Guid id, DeviceDto device);
+        Guid CreateDevice(CreateDeviceRequest request);
+        void DeleteDeviceById(Guid id);
+        List<DeviceResponse> GetAllDevices();
+        DeviceResponse GetDeviceById(Guid id);
+        Guid UpdateDevice(UpdateDeviceRequest request);
     }
 }

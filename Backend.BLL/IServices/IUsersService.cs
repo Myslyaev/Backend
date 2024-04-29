@@ -1,12 +1,12 @@
-﻿using Backend.Core.DTOs;
+﻿using Backend.Core.Models.Users;
 
 namespace Backend.BLL.IServices;
 
 public interface IUsersService
 {
-    UserDto GetUserById(Guid id);
-    List<UserDto> GetAllUsers();
-    void CreateUser(UserDto user);
-    void UpdateUser(Guid id, UserDto user);
+    UserWithDevicesResponse GetUserById(Guid id);
+    List<UserResponse> GetAllUsers();
+    Guid CreateUser(CreateUserRequest request);
+    Guid UpdateUser(UpdateUserRequest request);
     void DeleteUserById(Guid id);
 }

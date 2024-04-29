@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Backend.Core\Backend.Core.csproj" />
     <ProjectReference Include="..\Backend.DAL\Backend.DAL.csproj" />
   </ItemGroup>

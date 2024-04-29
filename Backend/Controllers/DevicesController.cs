@@ -1,6 +1,7 @@
 ﻿using Backend.BLL.IServices;
-using Backend.Core.DTOs;
+using Backend.Core.Models.Devices;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Backend.API.Controllers;
 
@@ -10,6 +11,7 @@ namespace Backend.API.Controllers;
 public class DevicesController : Controller
 {
     private readonly IDevicesService _devicesService;
+    private readonly Serilog.ILogger _logger = Log.ForContext<DevicesController>();
 
     public DevicesController(IDevicesService devicesService)
     {
@@ -17,32 +19,38 @@ public class DevicesController : Controller
     }
 
     [HttpGet]
-    public List<DeviceDto> GetAllDevices()
+    public ActionResult<List<DeviceResponse>> GetAllDevices()
     {
-        return _devicesService.GetAllDevices();
+        _logger.Information("Получаем список всех устройств");
+        return Ok(_devicesService.GetAllDevices());
     }
 
     [HttpGet("{id}")]
-    public DeviceDto GetDeviceById(Guid id)
+    public ActionResult<DeviceResponse> GetDeviceById(Guid id)
     {
-        return _devicesService.GetDeviceById(id);
+        _logger.Information($"Получаем устройство по {id}");
+        return Ok(_devicesService.GetDeviceById(id));
     }
 
     [HttpPost]
-    public void CreateDevice([FromQuery] DeviceDto device)
+    public ActionResult<Guid> CreateDevice([FromBody] CreateDeviceRequest request)
     {
-        _devicesService.CreateDevice(device);
+        _logger.Information($"Добавляем устройство {request.Name}");
+        return Ok(_devicesService.CreateDevice(request));
     }
 
     [HttpPut("{id}")]
-    public void UpdateDevice(Guid id, [FromQuery] DeviceDto device)
+    public ActionResult UpdateDevice([FromBody] UpdateDeviceRequest request)
     {
-        _devicesService.UpdateDevice(id, device);
+        _logger.Information($"Изменяем инфорфацию об устройстве {request.Id}");
+        return Ok(_devicesService.UpdateDevice(request));
     }
 
     [HttpDelete("{id}")]
-    public void DeleteDevice(Guid id)
+    public ActionResult DeleteDeviceById(Guid id)
     {
-        _devicesService.DeleteDevice(id);
+        _logger.Information($"Удаляем устройство {id}");
+        _devicesService.DeleteDeviceById(id);
+        return Ok();
     }
 }

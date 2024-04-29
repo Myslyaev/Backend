@@ -1,38 +1,53 @@
 ﻿using Backend.Core.DTOs;
 using Backend.DAL.IRepositories;
+using Serilog;
 
 namespace Backend.DAL.Repositories;
 
 public class DevicesRepository : BaseRepository, IDevicesRepository
 {
+    private readonly ILogger _logger = Log.ForContext<DevicesRepository>();
+
     public DevicesRepository(MamkinMainerContext context) : base(context)
     {
     }
 
-    public List<DeviceDto> GetAllDevices() => _ctx.Devices.ToList();
-
-    public DeviceDto GetDeviceById(Guid id) => _ctx.Devices.FirstOrDefault(d => d.Id == id);
-
-    public void CreateDevice(DeviceDto device) => _ctx.Devices.Add(device);
-
-    public void DeleteDevice(Guid id)
+    public List<DeviceDto> GetAllDevices()
     {
-        var device = GetDeviceById(id);
-        _ctx.Devices.Remove(device);
+        _logger.Information("Запрашиваем список устройств из базы");
+        return _ctx.Devices.ToList();
     }
 
-    public void UpdateDevice(Guid id, DeviceDto device)
+    public DeviceDto GetDeviceById(Guid id)
     {
-        var devicewFromDb = GetDeviceById(id);
+        _logger.Information($"Ищем в базе устройство {id}");
+        return _ctx.Devices.FirstOrDefault(d => d.Id == id);
+    }
 
-        if (devicewFromDb != null)
-        {
-            devicewFromDb.DeviceType = device.DeviceType;
-            devicewFromDb.Name = device.Name;
-            devicewFromDb.Adress = device.Adress;
-            devicewFromDb.Owner = device.Owner;
+    public Guid CreateDevice(DeviceDto device)
+    {
+        _logger.Information($"Добавляем устройство {device.Name} в базу данных");
+        _ctx.Devices.Add(device);
+        _ctx.SaveChanges();
 
-            _ctx.Devices.Update(devicewFromDb);
-        }
+        _logger.Information($"Устройство добавлено. Возвращаем Id устройства:{device.Name}");
+        return device.Id;
+    }
+
+    public void DeleteDevice(DeviceDto device)
+    {
+        _logger.Information($"Удаляем устройство из базы данных: {device.Name}");
+        _ctx.Devices.Remove(device);
+        _ctx.SaveChanges();
+    }
+
+    public Guid UpdateDevice(DeviceDto device)
+    {
+        _logger.Information($"Обновляем информацию об устройстве в базе данных: {device.Id}");
+        _ctx.Devices.Update(device);
+        _ctx.SaveChanges();
+
+        _logger.Information($"Информация обновлена. Возвращаем Id устройства: {device.Id}");
+        return device.Id;
     }
 }
