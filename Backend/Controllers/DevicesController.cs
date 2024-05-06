@@ -26,7 +26,7 @@ public class DevicesController : Controller
     }
 
     [HttpGet("{id}")]
-    public ActionResult<DeviceResponse> GetDeviceById(Guid id)
+    public ActionResult<DeviceWithOwnerResponse> GetDeviceById(Guid id)
     {
         _logger.Information($"Получаем устройство по {id}");
         return Ok(_devicesService.GetDeviceById(id));

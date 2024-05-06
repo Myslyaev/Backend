@@ -1,5 +1,6 @@
 ﻿using Backend.BLL.IServices;
 using Backend.Core.DTOs;
+using Backend.Core.Models.Devices;
 using Backend.Core.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -12,11 +13,13 @@ namespace Backend.API.Controllers;
 public class UsersController : Controller
 {
     private readonly IUsersService _usersService;
+    private readonly IDevicesService _devicesService;
     private readonly Serilog.ILogger _logger = Log.ForContext<UsersController>();
 
-    public UsersController(IUsersService usersService)
+    public UsersController(IUsersService usersService, IDevicesService devicesService)
     {
         _usersService = usersService;
+        _devicesService= devicesService;
     }
 
     [HttpGet]
@@ -38,6 +41,13 @@ public class UsersController : Controller
     {
         _logger.Information($"Добавляем пользователя {request.Email}");
         return Ok(_usersService.CreateUser(request));
+    }
+
+    [HttpPost("{userId}/devices")]
+    public ActionResult<Guid> CreateDeviceWithOwner([FromBody] CreateDeviceWithOwnerRequest request)
+    {
+        _logger.Information($"Добавляем устройство {request.Name} принадлежащее {request.OwnerId}");
+        return Ok(_devicesService.CreateDeviceWitnOwner(request));
     }
 
     [HttpPut("{id}")]

@@ -24,6 +24,13 @@ public class DevicesRepository : BaseRepository, IDevicesRepository
         return _ctx.Devices.FirstOrDefault(d => d.Id == id);
     }
 
+    public Guid CreateDeviceWithOwner(DeviceDto device)
+    {
+        _logger.Information($"Добавляем устройство {device.Name} принадлежащее пользователю {device.Owner.Id} в базу данных");
+        _ctx.Devices.Add(device);
+        _logger.Information($"Устройство добавлено. Возвращаем Id устройства:{device.Name}");
+        return device.Id;
+    }
     public Guid CreateDevice(DeviceDto device)
     {
         _logger.Information($"Добавляем устройство {device.Name} в базу данных");

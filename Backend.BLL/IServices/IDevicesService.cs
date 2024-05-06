@@ -5,9 +5,10 @@ namespace Backend.BLL.IServices
     public interface IDevicesService
     {
         Guid CreateDevice(CreateDeviceRequest request);
+        Guid CreateDeviceWitnOwner(CreateDeviceWithOwnerRequest request);
         void DeleteDeviceById(Guid id);
         List<DeviceResponse> GetAllDevices();
-        DeviceResponse GetDeviceById(Guid id);
+        DeviceWithOwnerResponse GetDeviceById(Guid id);
         Guid UpdateDevice(UpdateDeviceRequest request);
     }
 }

@@ -4,6 +4,7 @@ namespace Backend.DAL.IRepositories;
 
 public interface IDevicesRepository
 {
+    Guid CreateDeviceWithOwner(DeviceDto device);
     Guid CreateDevice(DeviceDto device);
     void DeleteDevice(DeviceDto device);
     List<DeviceDto> GetAllDevices();

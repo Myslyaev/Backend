@@ -18,5 +18,9 @@ public class MamkinMainerContext : DbContext
             .Entity<DeviceDto>()
             .HasOne(d => d.Owner)
             .WithMany(u => u.Devices);
+
+        modelBuilder
+            .Entity<UserDto>()
+            .HasMany(d => d.Devices);
     }
 }
