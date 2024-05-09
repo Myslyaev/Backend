@@ -14,5 +14,7 @@ public class UsersMappingProfile : Profile
         CreateMap<CreateUserRequest, UserDto>();
 
         CreateMap<UpdateUserRequest, UserDto>();
+
+        CreateMap<LoginUserRequest, UserDto>();
     }
 }

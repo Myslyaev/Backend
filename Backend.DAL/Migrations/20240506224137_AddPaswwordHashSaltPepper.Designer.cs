@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.DAL.Migrations
 {
     [DbContext(typeof(MamkinMainerContext))]
-    [Migration("20240501204607_AddDevicesRelation")]
-    partial class AddDevicesRelation
+    [Migration("20240506224137_AddPaswwordHashSaltPepper")]
+    partial class AddPaswwordHashSaltPepper
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,9 +68,13 @@ namespace Backend.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("email");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("text")
-                        .HasColumnName("password");
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("PasswordSalt")
+                        .HasColumnType("text")
+                        .HasColumnName("password_salt");
 
                     b.Property<string>("UserName")
                         .HasColumnType("text")

@@ -1,5 +1,6 @@
 ﻿using Backend.Core.DTOs;
 using Backend.DAL.IRepositories;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Backend.DAL.Repositories;
@@ -21,13 +22,14 @@ public class DevicesRepository : BaseRepository, IDevicesRepository
     public DeviceDto GetDeviceById(Guid id)
     {
         _logger.Information($"Ищем в базе устройство {id}");
-        return _ctx.Devices.FirstOrDefault(d => d.Id == id);
+        return _ctx.Devices.Include(d=>d.Owner).FirstOrDefault(d => d.Id == id);
     }
 
     public Guid CreateDeviceWithOwner(DeviceDto device)
     {
         _logger.Information($"Добавляем устройство {device.Name} принадлежащее пользователю {device.Owner.Id} в базу данных");
         _ctx.Devices.Add(device);
+        _ctx.SaveChanges();
         _logger.Information($"Устройство добавлено. Возвращаем Id устройства:{device.Name}");
         return device.Id;
     }

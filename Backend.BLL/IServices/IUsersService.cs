@@ -4,6 +4,7 @@ namespace Backend.BLL.IServices;
 
 public interface IUsersService
 {
+    AuthenticatedResponse LoginUser(LoginUserRequest request);
     UserWithDevicesResponse GetUserById(Guid id);
     List<UserResponse> GetAllUsers();
     Guid CreateUser(CreateUserRequest request);

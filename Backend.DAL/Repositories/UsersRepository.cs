@@ -1,5 +1,6 @@
 ﻿using Backend.Core.DTOs;
 using Backend.DAL.IRepositories;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Backend.DAL.Repositories;
@@ -21,16 +22,22 @@ public class UsersRepository : BaseRepository, IUsersRepository
     public UserDto GetUserById(Guid id)
     {
         _logger.Information($"Ищем в базе пользователя {id}");
-        return _ctx.Users.FirstOrDefault(u => u.Id == id);
+        return _ctx.Users.Include(u=>u.Devices).FirstOrDefault(u => u.Id == id);
+    }
+
+    public UserDto GetUserByMail(string mail)
+    {
+        _logger.Information($"Ищем в базе пользователяc с e-mail {mail}");
+        return _ctx.Users.FirstOrDefault(u => u.Email == mail);
     }
 
     public Guid CreateUser(UserDto user)
     {
-        _logger.Information($"Добавляем прльзователя {user.Email} в базу данных");
+        _logger.Information($"Добавляем пользователя {user.Email} в базу данных");
         _ctx.Users.Add(user);
         _ctx.SaveChanges();
 
-        _logger.Information($"Позователь добавлен. Возвращаем Id пользователя:{user.Email}");
+        _logger.Information($"Пользователь добавлен. Возвращаем Id пользователя:{user.Email}");
         return user.Id;
     }
 

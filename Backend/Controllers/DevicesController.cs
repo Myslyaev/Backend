@@ -1,10 +1,12 @@
 ﻿using Backend.BLL.IServices;
 using Backend.Core.Models.Devices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace Backend.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/api/devices")]
 

@@ -65,9 +65,13 @@ namespace Backend.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("email");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("text")
-                        .HasColumnName("password");
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("PasswordSalt")
+                        .HasColumnType("text")
+                        .HasColumnName("password_salt");
 
                     b.Property<string>("UserName")
                         .HasColumnType("text")

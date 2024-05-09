@@ -1,7 +1,6 @@
 using Backend.API.Configuration;
 using Backend.API.Extensions;
 using Backend.BLL;
-using Backend.Core.Models.Users;
 using Backend.DAL;
 using Serilog;
 
@@ -18,8 +17,7 @@ try
     builder.Services.ConfigureApiServices();
     builder.Services.ConfigureBllServices();
     builder.Services.ConfigureDalServices();
-    builder.Services.ConfigureDataBase();
-
+    
     builder.Host.UseSerilog();
 
     var app = builder.Build();
@@ -27,16 +25,16 @@ try
     app.UseMiddleware<ExceptionMiddleware>();
 
     // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    if (!app.Environment.IsProduction())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
     }
 
     app.UseHttpsRedirection();
-
     app.UseSerilogRequestLogging();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

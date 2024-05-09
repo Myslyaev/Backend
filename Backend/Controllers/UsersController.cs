@@ -1,5 +1,4 @@
 ﻿using Backend.BLL.IServices;
-using Backend.Core.DTOs;
 using Backend.Core.Models.Devices;
 using Backend.Core.Models.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,7 @@ public class UsersController : Controller
     public UsersController(IUsersService usersService, IDevicesService devicesService)
     {
         _usersService = usersService;
-        _devicesService= devicesService;
+        _devicesService = devicesService;
     }
 
     [HttpGet]
@@ -36,6 +35,15 @@ public class UsersController : Controller
         return Ok(_usersService.GetUserById(id));
     }
 
+    [HttpPost("login")]
+    public ActionResult<AuthenticatedResponse> Login([FromBody] LoginUserRequest request)
+    {
+        _logger.Information($"Авторизация пользователя");
+        var authenticatedResponse = _usersService.LoginUser(request);
+
+        return Ok(authenticatedResponse);
+    }
+
     [HttpPost]
     public ActionResult<Guid> CreateUser([FromBody] CreateUserRequest request)
     {
@@ -43,7 +51,7 @@ public class UsersController : Controller
         return Ok(_usersService.CreateUser(request));
     }
 
-    [HttpPost("{userId}/devices")]
+    [HttpPost("{userId}/device")]
     public ActionResult<Guid> CreateDeviceWithOwner([FromBody] CreateDeviceWithOwnerRequest request)
     {
         _logger.Information($"Добавляем устройство {request.Name} принадлежащее {request.OwnerId}");
