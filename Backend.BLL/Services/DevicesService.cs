@@ -4,7 +4,9 @@ using Backend.Core.DTOs;
 using Backend.Core.Exceptions;
 using Backend.Core.Models.Devices;
 using Backend.DAL.IRepositories;
+using FluentValidation;
 using Serilog;
+using ValidationException = Backend.Core.Exceptions.ValidationException;
 
 namespace Backend.BLL.Services;
 
@@ -14,20 +16,32 @@ public class DevicesService : IDevicesService
     private readonly IUsersRepository _usersRepository;
     private readonly ILogger _logger = Log.ForContext<DevicesService>();
     private readonly IMapper _mapper;
+    private readonly IValidator<CreateDeviceRequest> _deviceValidator;
+    private readonly IValidator<CreateDeviceWithOwnerRequest> _deviceWithOwnerValidator;
 
 
-    public DevicesService(IDevicesRepository devicesRepository, IUsersRepository usersRepository, IMapper mapper)
+    public DevicesService(IDevicesRepository devicesRepository, IUsersRepository usersRepository, IMapper mapper, IValidator<CreateDeviceRequest> deviceValidator,
+                          IValidator<CreateDeviceWithOwnerRequest> deviceWithOwnerValidator)
     {
         _usersRepository = usersRepository;
         _devicesRepository = devicesRepository;
         _mapper = mapper;
+        _deviceValidator = deviceValidator;
+        _deviceWithOwnerValidator = deviceWithOwnerValidator;
     }
 
     public Guid CreateDevice(CreateDeviceRequest request)
     {
-        _logger.Information("Вызываем метод репозитория");
-        var device = _mapper.Map<DeviceDto>(request);
-        return _devicesRepository.CreateDevice(device);
+        var validationResult = _deviceValidator.Validate(request);
+        if (validationResult.IsValid)
+        {
+            _logger.Information("Вызываем метод репозитория");
+            var device = _mapper.Map<DeviceDto>(request);
+            return _devicesRepository.CreateDevice(device);
+        }
+        string exceptions = string.Join(Environment.NewLine, validationResult.Errors);
+
+        throw new ValidationException(exceptions);
     }
 
     public void DeleteDeviceById(Guid id)
@@ -76,16 +90,23 @@ public class DevicesService : IDevicesService
 
     public Guid CreateDeviceWitnOwner(CreateDeviceWithOwnerRequest request)
     {
-        _logger.Information("Вызываем метод репозитория");
-        var owner = _usersRepository.GetUserById(request.OwnerId);
-        if (owner is null)
+        var validationResult = _deviceWithOwnerValidator.Validate(request);
+        if (validationResult.IsValid)
         {
-            _logger.Error($"Пользователь c id:{request.OwnerId} не найден");
-            throw new NotFoundException($"Пользователь c id:{request.OwnerId} не найден");
-        }
+            _logger.Information("Вызываем метод репозитория");
+            var owner = _usersRepository.GetUserById(request.OwnerId);
+            if (owner is null)
+            {
+                _logger.Error($"Пользователь c id:{request.OwnerId} не найден");
+                throw new NotFoundException($"Пользователь c id:{request.OwnerId} не найден");
+            }
 
-        var device = _mapper.Map<DeviceDto>(request);
-        device.Owner = owner;
-        return _devicesRepository.CreateDeviceWithOwner(device);
+            var device = _mapper.Map<DeviceDto>(request);
+            device.Owner = owner;
+            return _devicesRepository.CreateDeviceWithOwner(device);
+        }
+        string exceptions = string.Join(Environment.NewLine, validationResult.Errors);
+
+        throw new ValidationException(exceptions);
     }
 }

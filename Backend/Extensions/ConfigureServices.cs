@@ -13,5 +13,6 @@ public static class ConfigureServices
         services.ConfigureAuthentication();
         services.ConfigureDataBase();
         services.ConfigureSwagger();
+        services.ConfigureValidation();
     }
 }

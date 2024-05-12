@@ -7,4 +7,6 @@ public static class ServicesConstants
     public const string Ui = "UI";
 
     public const string ProjectVersion = "v1";
+
+    public const int Iteration = 3;
 }
