@@ -17,13 +17,7 @@ namespace Backend.BLL.Tests.Services
 
         public UsersServiceTest(IMapper mapper, IValidator<CreateUserRequest> userValidator, IValidator<UpdateUserRequest> userUpdateValidator)
         {
-            //_mapper = mapper;
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new UsersMappingProfile());
-            });
-
-            _mapper = new Mapper(config);
+            _mapper = mapper;
             _userValidator = userValidator;
             _userUpdateValidator = userUpdateValidator;
             _usersRepositoryMock = new Mock<IUsersRepository>();
