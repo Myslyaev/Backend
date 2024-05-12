@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.API", "Backend\Backend.API.csproj", "{D2354238-250D-44E5-AA31-C61FB078DD68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.API", "Backend\Backend.API.csproj", "{D2354238-250D-44E5-AA31-C61FB078DD68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Core", "Backend.Core\Backend.Core.csproj", "{870D1BEB-C798-4015-BE76-7D558BB4559B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Core", "Backend.Core\Backend.Core.csproj", "{870D1BEB-C798-4015-BE76-7D558BB4559B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.DAL", "Backend.DAL\Backend.DAL.csproj", "{1AA618BC-AC6A-486F-B150-23326284C160}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.DAL", "Backend.DAL\Backend.DAL.csproj", "{1AA618BC-AC6A-486F-B150-23326284C160}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.BLL", "Backend.BLL\Backend.BLL.csproj", "{02ECB985-205B-4DCB-B9E0-35BC2280D36F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.BLL", "Backend.BLL\Backend.BLL.csproj", "{02ECB985-205B-4DCB-B9E0-35BC2280D36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.BLL.Tests", "Backend.BLL.Tests\Backend.BLL.Tests.csproj", "{B1C74B61-4520-42E5-B368-48D1B45D4035}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{02ECB985-205B-4DCB-B9E0-35BC2280D36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02ECB985-205B-4DCB-B9E0-35BC2280D36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02ECB985-205B-4DCB-B9E0-35BC2280D36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1C74B61-4520-42E5-B368-48D1B45D4035}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1C74B61-4520-42E5-B368-48D1B45D4035}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1C74B61-4520-42E5-B368-48D1B45D4035}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1C74B61-4520-42E5-B368-48D1B45D4035}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,13 +1,12 @@
 ﻿using Backend.Core.Exceptions;
 using Serilog;
-using System.Net;
 
 namespace Backend.API.Configuration;
 
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly Serilog.ILogger _logger =Log.ForContext<ExceptionMiddleware>();
+    private readonly Serilog.ILogger _logger = Log.ForContext<ExceptionMiddleware>();
     public ExceptionMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -19,7 +18,7 @@ public class ExceptionMiddleware
         {
             await _next(httpContext);
         }
-        
+
         catch (ValidationException ex)
         {
             _logger.Error($"Ошибка валидации {ex.Message}");
@@ -45,7 +44,7 @@ public class ExceptionMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
         await context.Response.WriteAsync(new ErrorDetails()
         {
             StatusCode = context.Response.StatusCode,
@@ -56,7 +55,7 @@ public class ExceptionMiddleware
     private async Task HandleValidationExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+        context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
 
         await context.Response.WriteAsync(new ErrorDetails()
         {
@@ -68,7 +67,7 @@ public class ExceptionMiddleware
     private async Task HandleAuthenticationExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
         await context.Response.WriteAsync(new ErrorDetails()
         {
@@ -80,7 +79,7 @@ public class ExceptionMiddleware
     private async Task HandleNotFoundExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
 
         await context.Response.WriteAsync(new ErrorDetails()
         {
