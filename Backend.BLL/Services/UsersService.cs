@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Backend.BLL.IServices;
 using Backend.Core.Constants;
+using Backend.Core.Constants.Exceptions;
 using Backend.Core.DTOs;
 using Backend.Core.Exceptions;
 using Backend.Core.Models.Users;
@@ -59,12 +60,12 @@ public class UsersService : IUsersService
         var userDb = _usersRepository.GetUserByMail(user.Email.ToLower());
 
         if (userDb == null)
-            throw new NotFoundException("Логин или пароль введены неверно");
+            throw new AuthenticationException(string.Format(UsersServiceExceptions.AuthenticationException));
 
         _logger.Information("Проверяем аутентификационные данные");
         var passwordHash = PasswordHasher.ComputeHash(request.Password, userDb.PasswordSalt, _pepper, _iteration);
         if (userDb.PasswordHash != passwordHash)
-            throw new AuthenticationException("Логин или пароль введены неверно");
+            throw new AuthenticationException(string.Format(UsersServiceExceptions.AuthenticationException));
 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SecretKey")));
         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -87,7 +88,7 @@ public class UsersService : IUsersService
         if (user is null)
         {
             _logger.Error($"Пользователь c id:{id} не найден");
-            throw new NotFoundException($"Пользователь c id:{id} не найден");
+            throw new NotFoundException(string.Format(UsersServiceExceptions.NotFoundException, id));
         }
         _usersRepository.DeleteUser(user);
     }
@@ -107,7 +108,7 @@ public class UsersService : IUsersService
         if (user is null)
         {
             _logger.Error($"Пользователь c id:{id} не найден");
-            throw new NotFoundException($"Пользователь c id:{id} не найден");
+            throw new NotFoundException(string.Format(UsersServiceExceptions.NotFoundException, id));
         }
         return user;
     }
@@ -122,7 +123,7 @@ public class UsersService : IUsersService
             if (userDb is null)
             {
                 _logger.Error($"Пользователь c id:{request.Id} не найден");
-                throw new NotFoundException($"Пользователь c id:{request.Id} не найден");
+                throw new NotFoundException(string.Format(UsersServiceExceptions.NotFoundException, request.Id));
             }
 
             //user.UserName= request.UserName;

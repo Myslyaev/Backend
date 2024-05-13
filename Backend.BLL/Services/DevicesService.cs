@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Backend.BLL.IServices;
+using Backend.Core.Constants.Exceptions;
 using Backend.Core.DTOs;
 using Backend.Core.Exceptions;
 using Backend.Core.Models.Devices;
@@ -51,7 +52,7 @@ public class DevicesService : IDevicesService
         if (device is null)
         {
             _logger.Error($"Устройство c id:{id} не найдено");
-            throw new NotFoundException($"Устройство c id:{id} не найдено");
+            throw new NotFoundException(string.Format(DevicesServiceExceptions.NotFoundException, id));
         }
         _devicesRepository.DeleteDevice(device);
     }
@@ -77,7 +78,7 @@ public class DevicesService : IDevicesService
         if (device is null)
         {
             _logger.Error($"Устройство c id:{request.Id} не найдено");
-            throw new NotFoundException($"Устройство c id:{request.Id} не найдено");
+            throw new NotFoundException(string.Format(DevicesServiceExceptions.NotFoundException, request.Id));
         }
 
         device.Name = request.Name;
@@ -98,7 +99,7 @@ public class DevicesService : IDevicesService
             if (owner is null)
             {
                 _logger.Error($"Пользователь c id:{request.OwnerId} не найден");
-                throw new NotFoundException($"Пользователь c id:{request.OwnerId} не найден");
+                throw new NotFoundException(string.Format(UsersServiceExceptions.NotFoundException, request.OwnerId));
             }
 
             var device = _mapper.Map<DeviceDto>(request);
