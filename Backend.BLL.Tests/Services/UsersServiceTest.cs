@@ -30,7 +30,7 @@ namespace Backend.BLL.Tests.Services
         }
 
         [Fact]
-        public void CreateUserTest_ValidRequestSend_GuidReceived()
+        public void CreateUserTest_ValidRequestSent_GuidReceived()
         {
             //arange
             var validCreateUserRequest = new CreateUserRequest()
