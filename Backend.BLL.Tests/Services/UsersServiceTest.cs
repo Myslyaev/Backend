@@ -2,6 +2,7 @@ using AutoMapper;
 using Backend.BLL.Services;
 using Backend.Core.DTOs;
 using Backend.Core.Models.Users;
+using Backend.Core.Validators.Users;
 using Backend.DAL.IRepositories;
 using FluentValidation;
 using Moq;
@@ -15,11 +16,16 @@ namespace Backend.BLL.Tests.Services
         private readonly IValidator<CreateUserRequest> _userValidator;
         private readonly IValidator<UpdateUserRequest> _userUpdateValidator;
 
-        public UsersServiceTest(IMapper mapper, IValidator<CreateUserRequest> userValidator, IValidator<UpdateUserRequest> userUpdateValidator)
+        public UsersServiceTest()
         {
-            _mapper = mapper;
-            _userValidator = userValidator;
-            _userUpdateValidator = userUpdateValidator;
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new UsersMappingProfile());
+            });
+
+            _mapper = new Mapper(config);
+            _userValidator = new CreateUserRequestValidator();
+            _userUpdateValidator = new UpdateUserRequestValidator();
             _usersRepositoryMock = new Mock<IUsersRepository>();
         }
 
