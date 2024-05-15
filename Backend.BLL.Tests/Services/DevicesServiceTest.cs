@@ -5,15 +5,9 @@ using Backend.Core.Enums;
 using Backend.Core.Models.Devices;
 using Backend.Core.Models.Users;
 using Backend.Core.Validators.Devices;
-using Backend.Core.Validators.Users;
 using Backend.DAL.IRepositories;
 using FluentValidation;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Backend.BLL.Tests.Services
 {
@@ -43,15 +37,16 @@ namespace Backend.BLL.Tests.Services
         [Fact]
         public void CreateDeviceTest_ValidRequestSent_GuidReceived()
         {
-            //arange
+            //arrange
             var validCreateDeviceRequest = new CreateDeviceRequest()
             {
-                Name ="Test",
-                Type=DeviceType.PC,
-                Adress="TestTest"
+                Name = "Test",
+                Type = DeviceType.PC,
+                Adress = "TestTest"
             };
             var expectedGuid = Guid.NewGuid();
             _devicesRepositoryMock.Setup(r => r.CreateDevice(It.IsAny<DeviceDto>())).Returns(expectedGuid);
+
             var sut = new DevicesService(_devicesRepositoryMock.Object, _usersRepositoryMock.Object, _mapper, _deviceValidator, _deviceWithOwnerValidator);
 
             //act
