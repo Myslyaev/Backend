@@ -45,6 +45,7 @@ namespace Backend.BLL.Tests.Services
             };
             var expectedGuid = Guid.NewGuid();
             _usersRepositoryMock.Setup(r => r.CreateUser(It.IsAny<UserDto>())).Returns(expectedGuid);
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -86,6 +87,7 @@ namespace Backend.BLL.Tests.Services
             var expected = new List<UserResponse>() { new UserResponse() { Email = "test@test.ru" }, { new UserResponse() { Email = "test@test.ru" } } };
             var expectedDto = new List<UserDto>() { new UserDto() { Email = "test@test.ru" }, { new UserDto() { Email = "test@test.ru" } } };
             _usersRepositoryMock.Setup(r => r.GetAllUsers()).Returns(expectedDto);
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -104,6 +106,7 @@ namespace Backend.BLL.Tests.Services
             var expected = new UserResponse() { Email = "test@test.ru" };
             var expectedDto = new UserDto() { Email = "test@test.ru" };
             _usersRepositoryMock.Setup(r => r.GetUserById(It.IsAny<Guid>())).Returns(expectedDto);
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -122,6 +125,7 @@ namespace Backend.BLL.Tests.Services
             var expected = new UserResponse() { Email = "test@test.ru" };
             var expectedDto = new UserDto() { Email = "test@test.ru" };
             _usersRepositoryMock.Setup(r => r.GetUserById(guid)).Returns((UserDto)null);
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -141,6 +145,7 @@ namespace Backend.BLL.Tests.Services
             var expected = new UserResponse() { Email = "test@test.ru" };
             var expectedDto = new UserDto() { Email = "test@test.ru" };
             _usersRepositoryMock.Setup(r => r.GetUserById(guid)).Returns((UserDto)null);
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -158,6 +163,7 @@ namespace Backend.BLL.Tests.Services
             //arrange
             Guid guid = new Guid();
             _usersRepositoryMock.Setup(r => r.GetUserById(guid)).Returns(new UserDto());
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -174,6 +180,7 @@ namespace Backend.BLL.Tests.Services
             //arrange
             Guid guid = Guid.Empty;
             _usersRepositoryMock.Setup(r => r.GetUserById(guid)).Returns((UserDto)null);
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -192,6 +199,7 @@ namespace Backend.BLL.Tests.Services
             //arrange
             Guid guid = new Guid();
             _usersRepositoryMock.Setup(r => r.GetUserById(guid)).Returns((UserDto)null);
+
             var sut = new UsersService(_usersRepositoryMock.Object, _mapper, _userValidator, _userUpdateValidator);
 
             //act
@@ -203,7 +211,5 @@ namespace Backend.BLL.Tests.Services
             _usersRepositoryMock.Verify(r => r.GetUserById(guid), Times.Once());
             _usersRepositoryMock.Verify(r => r.DeleteUser(It.IsAny<UserDto>()), Times.Never);
         }
-
-
     }
 }

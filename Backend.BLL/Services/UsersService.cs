@@ -116,23 +116,24 @@ public class UsersService : IUsersService
     public Guid UpdateUser(UpdateUserRequest request)
     {
         var validationResult = _userUpdateValidator.Validate(request);
-        if (validationResult.IsValid)
+        if (!validationResult.IsValid)
         {
-            _logger.Information("Вызываем метод репозитория");
-            var userDb = _usersRepository.GetUserById(request.Id);
-            if (userDb is null)
-            {
-                _logger.Error($"Пользователь c id:{request.Id} не найден");
-                throw new NotFoundException(string.Format(UsersServiceExceptions.NotFoundException, request.Id));
-            }
+            string exceptions = string.Join(Environment.NewLine, validationResult.Errors);
 
-            //user.UserName= request.UserName;
-            //user.Password= request.Password;
-
-            return _usersRepository.UpdateUser(userDb);
+            throw new ValidationException(exceptions);
         }
-        string exceptions = string.Join(Environment.NewLine, validationResult.Errors);
 
-        throw new ValidationException(exceptions);
+        _logger.Information("Вызываем метод репозитория");
+        var userDb = _usersRepository.GetUserById(request.Id);
+        if (userDb is null)
+        {
+            _logger.Error($"Пользователь c id:{request.Id} не найден");
+            throw new NotFoundException(string.Format(UsersServiceExceptions.NotFoundException, request.Id));
+        }
+
+        //user.UserName= request.UserName;
+        //user.Password= request.Password;
+
+        return _usersRepository.UpdateUser(userDb);
     }
 }

@@ -5,13 +5,19 @@ namespace Backend.DAL;
 
 public class MamkinMainerContext : DbContext
 {
-    public DbSet<UserDto> Users { get; set; }
-    public DbSet<DeviceDto> Devices { get; set; }
+    public virtual DbSet<UserDto> Users { get; set; }
+    public virtual DbSet<DeviceDto> Devices { get; set; }
 
     public MamkinMainerContext(DbContextOptions<MamkinMainerContext> options) : base(options)
     {
 
     }
+
+    public MamkinMainerContext()
+    {
+
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
