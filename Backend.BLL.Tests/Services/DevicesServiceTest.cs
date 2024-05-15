@@ -47,7 +47,7 @@ namespace Backend.BLL.Tests.Services
             var validCreateDeviceRequest = new CreateDeviceRequest()
             {
                 Name ="Test",
-                DeviceType=DeviceType.PC,
+                Type=DeviceType.PC,
                 Adress="TestTest"
             };
             var expectedGuid = Guid.NewGuid();

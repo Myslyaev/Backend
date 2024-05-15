@@ -39,17 +39,17 @@ public class UsersService : IUsersService
     public Guid CreateUser(CreateUserRequest request)
     {
         var validationResult = _userValidator.Validate(request);
-        if (validationResult.IsValid)
+        if (!validationResult.IsValid)
         {
-            _logger.Information("Вызываем метод репозитория");
-            var user = _mapper.Map<UserDto>(request);
-            user.PasswordSalt = PasswordHasher.GenerateSalt();
-            user.PasswordHash = PasswordHasher.ComputeHash(request.Password, user.PasswordSalt, _pepper, _iteration);
-            return _usersRepository.CreateUser(user);
+            string exceptions = string.Join(Environment.NewLine, validationResult.Errors);
+            throw new ValidationException(exceptions);
         }
-        string exceptions = string.Join(Environment.NewLine, validationResult.Errors);
 
-        throw new ValidationException(exceptions);
+        _logger.Information("Вызываем метод репозитория");
+        var user = _mapper.Map<UserDto>(request);
+        user.PasswordSalt = PasswordHasher.GenerateSalt();
+        user.PasswordHash = PasswordHasher.ComputeHash(request.Password, user.PasswordSalt, _pepper, _iteration);
+        return _usersRepository.CreateUser(user);
     }
 
     public AuthenticatedResponse LoginUser(LoginUserRequest request)

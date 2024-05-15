@@ -8,7 +8,7 @@ public class CreateDeviceWithOwnerRequestValidator : AbstractValidator<CreateDev
     public CreateDeviceWithOwnerRequestValidator()
     {
         RuleFor(d => d.Name).NotEmpty().WithMessage("Введите название устройства");
-        RuleFor(d => d.DeviceType).IsInEnum().WithMessage("Введите тип устройства");
+        RuleFor(d => d.Type).IsInEnum().WithMessage("Введите тип устройства");
         RuleFor(d => d.Adress).NotEmpty().WithMessage("Введите адрес расположения устройства");
         RuleFor(d => d.OwnerId).NotEmpty().WithMessage("Введите id владельца устройства");
     }

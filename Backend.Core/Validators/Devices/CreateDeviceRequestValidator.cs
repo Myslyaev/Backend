@@ -8,7 +8,7 @@ public class CreateDeviceRequestValidator : AbstractValidator<CreateDeviceReques
     public CreateDeviceRequestValidator()
     {
         RuleFor(d => d.Name).NotEmpty().NotNull().WithMessage("Введите название устройства");
-        RuleFor(d => d.DeviceType).IsInEnum().WithMessage("Введите тип устройства");
+        RuleFor(d => d.Type).IsInEnum().WithMessage("Введите тип устройства");
         RuleFor(d => d.Adress).NotEmpty().NotNull().WithMessage("Введите адрес расположения устройства");
     }
 }

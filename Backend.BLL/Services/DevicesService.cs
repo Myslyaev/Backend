@@ -82,7 +82,7 @@ public class DevicesService : IDevicesService
         }
 
         device.Name = request.Name;
-        device.DeviceType = request.DeviceType;
+        device.Type = request.Type;
         device.Adress = request.Adress;
         device.Owner = request.Owner;
 
